@@ -1,49 +1,69 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="dark">
+<html lang="zh-CN" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>IELTS Cockpit · 雅思冲刺舱</title>
+  <meta name="theme-color" content="#f7f7f2">
+  <title>IELTS Cockpit · Study, with intention.</title>
   <link rel="stylesheet" href="/css/theme.css">
   <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
-  <header class="topbar">
-    <div class="topbar-left">
-      <span class="logo">🎯 IELTS Cockpit</span>
-    </div>
-    <div class="topbar-center" id="countdown">距考试 — 天</div>
-    <div class="topbar-right">
-      <button id="theme-toggle" class="icon-btn" title="切换主题">🌓</button>
+  <svg class="icon-sprite" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
+    <symbol id="i-timer" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="m8 12 2.5 2.5L16 9M8 6h8"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 6c-2.5-1.5-5.5-1.5-9-1v14c3.5-.5 6.5-.5 9 1 2.5-1.5 5.5-1.5 9-1V5c-3.5-.5-6.5-.5-9 1Zm0 0v14"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 2 1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8L12 2ZM19 17l.7 2.3L22 20l-2.3.7L19 23l-.7-2.3L16 20l2.3-.7L19 17Z"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 10h18m-13 5 2 2 4-4"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 20h18M5 16l5-5 4 3 5-8M16 6h3v3"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3M4.9 4.9 7 7m10 10 2.1 2.1m0-14.2L17 7M7 17l-2.1 2.1"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5 8.5 8.5 0 1 0 20.5 14.5Z"/></symbol>
+  </svg>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#/dashboard" aria-label="IELTS Cockpit 总览">
+        <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="brand-wordmark">IELTS<span>Cockpit</span></span>
+      </a>
+      <nav class="primary-nav" aria-label="主导航">
+        <a href="#/dashboard" class="nav-item">总览</a>
+        <a href="#/mock-test" class="nav-item">练习</a>
+        <a href="#/practice-review" class="nav-item">判分</a>
+        <a href="#/vocab" class="nav-item">词汇</a>
+        <a href="#/insights" class="nav-item">洞察</a>
+        <a href="#/checkin" class="nav-item">打卡</a>
+        <a href="#/analytics" class="nav-item">分析</a>
+        <a href="#/settings" class="nav-item">设置</a>
+      </nav>
+      <div class="header-actions">
+        <span class="exam-pill"><span class="live-dot"></span><span id="countdown">距考试 — 天</span></span>
+        <button id="theme-toggle" class="icon-btn theme-toggle" type="button" title="切换主题" aria-label="切换主题"><svg class="icon"><use href="#i-moon"></use></svg></button>
+        <button id="menu-toggle" class="menu-toggle" type="button" aria-label="打开导航菜单" aria-controls="mobile-menu" aria-expanded="false"><span></span><span></span></button>
+      </div>
     </div>
   </header>
 
-  <div class="layout">
-    <nav class="sidebar" id="sidebar">
-      <a href="#/dashboard" class="nav-item">📊 总览</a>
-      <a href="#/mock-test" class="nav-item">⏱ 练题/模考</a>
-      <a href="#/practice-review" class="nav-item">✅ 录入判分</a>
-      <a href="#/vocab" class="nav-item">📚 同义/生词本</a>
-      <a href="#/insights" class="nav-item">💡 感悟规律</a>
-      <a href="#/checkin" class="nav-item">🔥 打卡</a>
-      <a href="#/analytics" class="nav-item">📈 分析</a>
-      <a href="#/settings" class="nav-item">⚙ 设置</a>
-    </nav>
-
-    <main class="content" id="content">
-      <div class="loading">加载中...</div>
-    </main>
-  </div>
-
-  <nav class="tabbar" id="tabbar">
-    <a href="#/dashboard" class="tab-item">📊</a>
-    <a href="#/mock-test" class="tab-item">⏱</a>
-    <a href="#/vocab" class="tab-item">📚</a>
-    <a href="#/insights" class="tab-item">💡</a>
-    <a href="#/checkin" class="tab-item">🔥</a>
-    <a href="#/settings" class="tab-item">⚙</a>
+  <div class="menu-backdrop" id="menu-backdrop" hidden></div>
+  <nav class="mobile-menu" id="mobile-menu" aria-label="移动端导航" aria-hidden="true">
+    <div class="mobile-menu-kicker">NAVIGATION / 导航</div>
+    <a href="#/dashboard" class="menu-item"><svg class="icon"><use href="#i-grid"></use></svg>总览</a>
+    <a href="#/mock-test" class="menu-item"><svg class="icon"><use href="#i-timer"></use></svg>练题与模考</a>
+    <a href="#/practice-review" class="menu-item"><svg class="icon"><use href="#i-check"></use></svg>录入与判分</a>
+    <a href="#/vocab" class="menu-item"><svg class="icon"><use href="#i-book"></use></svg>词汇本</a>
+    <a href="#/insights" class="menu-item"><svg class="icon"><use href="#i-spark"></use></svg>感悟规律</a>
+    <a href="#/checkin" class="menu-item"><svg class="icon"><use href="#i-calendar"></use></svg>学习打卡</a>
+    <a href="#/analytics" class="menu-item"><svg class="icon"><use href="#i-chart"></use></svg>数据分析</a>
+    <a href="#/settings" class="menu-item"><svg class="icon"><use href="#i-settings"></use></svg>设置</a>
+    <div class="mobile-menu-foot">Study, with intention.</div>
   </nav>
+
+  <div class="page-shell">
+    <div id="route-header"></div>
+    <main class="content" id="content"><div class="loading">加载中...</div></main>
+  </div>
 
   <script type="module" src="/js/app.js"></script>
 </body>

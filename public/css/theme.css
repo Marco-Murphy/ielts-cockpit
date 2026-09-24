@@ -1,61 +1,59 @@
-/* theme.css - dark/light 双主题 CSS 变量（默认 dark，匹配用户 IDE 主题） */
 :root {
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
-  --font-mono: "Cascadia Code", "Consolas", monospace;
-  --radius: 12px;
-  --radius-sm: 8px;
-  --transition: 0.2s ease;
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-mono: "SFMono-Regular", "Cascadia Code", Consolas, monospace;
+  --radius: 18px;
+  --radius-sm: 10px;
+  --transition: 180ms ease;
   --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 24px; --space-6: 32px;
 }
-
-[data-theme="dark"] {
-  --bg: #0d1117;
-  --bg-elevated: #161b22;
-  --bg-hover: #1f2630;
-  --border: #30363d;
-  --text: #e6edf3;
-  --text-muted: #8b949e;
-  --text-subtle: #6e7681;
-  --primary: #58a6ff;
-  --primary-hover: #79b8ff;
-  --primary-dim: rgba(88,166,255,0.15);
-  --success: #3fb950;
-  --warning: #d29922;
-  --danger: #f85149;
-  --accent: #bc8cff;
-  --shadow: 0 4px 12px rgba(0,0,0,0.4);
-  --band-good: #3fb950;
-  --band-warn: #d29922;
-  --bad: #f85149;
-  --heat-0: #161b22;
-  --heat-1: #0e4429;
-  --heat-2: #006d32;
-  --heat-3: #26a641;
-  --heat-4: #39d353;
-}
-
 [data-theme="light"] {
-  --bg: #ffffff;
-  --bg-elevated: #f6f8fa;
-  --bg-hover: #eaeef2;
-  --border: #d0d7de;
-  --text: #1f2328;
-  --text-muted: #656d76;
-  --text-subtle: #8c959f;
-  --primary: #0969da;
-  --primary-hover: #0550ae;
-  --primary-dim: rgba(9,105,218,0.12);
-  --success: #1a7f37;
-  --warning: #9a6700;
-  --danger: #cf222e;
-  --accent: #8250df;
-  --shadow: 0 1px 3px rgba(0,0,0,0.1);
-  --band-good: #1a7f37;
-  --band-warn: #9a6700;
-  --bad: #cf222e;
-  --heat-0: #ebedf0;
-  --heat-1: #9be9a8;
-  --heat-2: #40c463;
-  --heat-3: #30a14e;
-  --heat-4: #216e39;
+  --bg: #f7f7f2;
+  --bg-elevated: #fffefa;
+  --bg-hover: #f0f2e9;
+  --border: #e0e4da;
+  --text: #17251e;
+  --text-muted: #637168;
+  --text-subtle: #879188;
+  --primary: #285b46;
+  --primary-hover: #1b4937;
+  --primary-dim: #e5eee6;
+  --success: #2e7652;
+  --warning: #9f6a29;
+  --danger: #b7544d;
+  --accent: #dff078;
+  --shadow: 0 16px 40px rgba(32, 50, 37, .035);
+  --band-good: #286a4a;
+  --band-warn: #9c6525;
+  --bad: #b54f49;
+  --heat-0: #ebeee6;
+  --heat-1: #d6e6c8;
+  --heat-2: #abd3a4;
+  --heat-3: #6bb083;
+  --heat-4: #287955;
+}
+[data-theme="dark"] {
+  --bg: #101814;
+  --bg-elevated: #1a241e;
+  --bg-hover: #26342b;
+  --border: #344238;
+  --text: #f1f4eb;
+  --text-muted: #b2c0b4;
+  --text-subtle: #85988a;
+  --primary: #afdda4;
+  --primary-hover: #d0f0b6;
+  --primary-dim: #294232;
+  --success: #9ed4a8;
+  --warning: #e2b878;
+  --danger: #ef9d94;
+  --accent: #dff078;
+  --shadow: none;
+  --band-good: #a9dba8;
+  --band-warn: #e8bb7c;
+  --bad: #ef9d94;
+  --heat-0: #26332a;
+  --heat-1: #345440;
+  --heat-2: #4b8057;
+  --heat-3: #79b378;
+  --heat-4: #addfa2;
 }

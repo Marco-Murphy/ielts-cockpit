@@ -17,11 +17,10 @@ export async function renderInsights(el) {
   const list = await api.get(`/api/insights${tab !== 'all' ? '?category=' + tab : ''}`).catch(() => []);
 
   el.innerHTML = `
-    <div class="card">
-      <h3>💡 学习感悟 / 规律库</h3>
-      <p class="subtle">做题悟出的规律、复盘发现的技巧，随手记在这里——过两周你可能就忘了当时怎么想通的。</p>
-      <div class="row" style="margin-top:12px">
-        ${CATS.map(c => `<button class="btn ${c.id===tab?'':'btn-secondary'}" data-tab="${c.id}" style="margin-right:4px">${c.name}</button>`).join('')}
+    <div class="collection-toolbar">
+      <p class="toolbar-note">把想通的规律留下来，下次遇见就能认出来。</p>
+      <div class="toolbar-tabs">
+        ${CATS.map(c => `<button class="btn ${c.id===tab?'':'btn-secondary'}" data-tab="${c.id}">${c.name}</button>`).join('')}
       </div>
     </div>
 

@@ -11,11 +11,10 @@ export async function renderVocab(el) {
   ];
 
   el.innerHTML = `
-    <div class="card">
-      <h3>生词本 / 同义替换本</h3>
-      <p class="subtle">做阅读时把"题目↔原文"的替换词对、听力里听不懂的场景词、阅读生词随手记进来，养成积累习惯。</p>
-      <div class="row" style="margin-top:12px">
-        ${tabs.map(t => `<button class="btn ${t.id===tab?'':'btn-secondary'}" data-tab="${t.id}" style="margin-right:4px">${t.name}</button>`).join('')}
+    <div class="collection-toolbar">
+      <p class="toolbar-note">按场景整理。每个词，都连着一段真实的练习。</p>
+      <div class="toolbar-tabs">
+        ${tabs.map(t => `<button class="btn ${t.id===tab?'':'btn-secondary'}" data-tab="${t.id}">${t.name}</button>`).join('')}
       </div>
     </div>
 

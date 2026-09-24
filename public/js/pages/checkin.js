@@ -15,7 +15,7 @@ export async function renderCheckin(el) {
   el.innerHTML = `
     <div class="card center">
       <h3>今日打卡</h3>
-      <div class="stat-big">🔥 ${streak.current}</div>
+      <div class="stat-big">${streak.current}</div>
       <div class="stat-label">连续天数（最长 ${streak.longest}）</div>
     </div>
 
@@ -100,7 +100,7 @@ export async function renderCheckin(el) {
         <span class="tag">${c.minutes} min</span>
       </div>
       <div class="muted" style="font-size:13px">${c.items && c.items.length ? c.items.join(' · ') : '（无内容记录）'}</div>
-      ${c.note ? `<div style="font-size:12px;margin-top:4px">📝 ${escapeHtml(c.note)}</div>` : ''}
+      ${c.note ? `<div style="font-size:12px;margin-top:4px">${escapeHtml(c.note)}</div>` : ''}
       <div style="margin-top:6px">
         <button class="btn btn-secondary" style="padding:2px 10px;font-size:12px" data-edit="${c.id}">编辑</button>
       </div>
