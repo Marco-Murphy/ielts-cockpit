@@ -1,0 +1,26 @@
+{
+  "name": "ielts-cockpit",
+  "version": "0.1.0",
+  "description": "本地运行的雅思备考工作台 — 练题判分 / 错题归因 / 词汇管理 / 打卡追踪 / 进度可视化",
+  "main": "server/index.js",
+  "keywords": [
+    "ielts",
+    "study-tool",
+    "self-hosted",
+    "express",
+    "vanilla-js"
+  ],
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "backup": "node scripts/backup.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  },
+  "license": "MIT"
+}

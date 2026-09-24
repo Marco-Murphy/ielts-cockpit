@@ -1,0 +1,15 @@
+{
+  "nickname": "",
+  "examTargetDate": "",
+  "targetCombo": {
+    "listening": 7.0,
+    "reading": 7.0,
+    "speaking": 6.5,
+    "writing": 6.5
+  },
+  "dailyMinutes": {
+    "min": 60,
+    "max": 120
+  },
+  "baseline": null
+}

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>IELTS Cockpit · 雅思冲刺舱</title>
+  <link rel="stylesheet" href="/css/theme.css">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-left">
+      <span class="logo">🎯 IELTS Cockpit</span>
+    </div>
+    <div class="topbar-center" id="countdown">距考试 — 天</div>
+    <div class="topbar-right">
+      <button id="theme-toggle" class="icon-btn" title="切换主题">🌓</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" id="sidebar">
+      <a href="#/dashboard" class="nav-item">📊 总览</a>
+      <a href="#/mock-test" class="nav-item">⏱ 练题/模考</a>
+      <a href="#/practice-review" class="nav-item">✅ 录入判分</a>
+      <a href="#/vocab" class="nav-item">📚 同义/生词本</a>
+      <a href="#/insights" class="nav-item">💡 感悟规律</a>
+      <a href="#/checkin" class="nav-item">🔥 打卡</a>
+      <a href="#/analytics" class="nav-item">📈 分析</a>
+      <a href="#/settings" class="nav-item">⚙ 设置</a>
+    </nav>
+
+    <main class="content" id="content">
+      <div class="loading">加载中...</div>
+    </main>
+  </div>
+
+  <nav class="tabbar" id="tabbar">
+    <a href="#/dashboard" class="tab-item">📊</a>
+    <a href="#/mock-test" class="tab-item">⏱</a>
+    <a href="#/vocab" class="tab-item">📚</a>
+    <a href="#/insights" class="tab-item">💡</a>
+    <a href="#/checkin" class="tab-item">🔥</a>
+    <a href="#/settings" class="tab-item">⚙</a>
+  </nav>
+
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>
