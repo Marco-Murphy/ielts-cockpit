@@ -354,7 +354,7 @@ ielts-cockpit/
 │   └── services/          AI 评分等服务
 ├── public/
 │   ├── index.html         单页入口
-│   ├── css/main.css       样式（暗色主题，响应式）
+│   ├── css/main.css       样式（亮暗双主题，响应式）
 │   └── js/
 │       ├── app.js         路由与启动
 │       └── pages/         各页面组件（原生 ES Modules）
