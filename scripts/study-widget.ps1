@@ -6,7 +6,7 @@ $checkinsFile = Join-Path $projectRoot 'data\checkins.json'
 $xaml = @'
 <Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="灯灯的学习角" Width="346" SizeToContent="Height"
+        Title="凑企鹅的学习角" Width="380" SizeToContent="Height"
         WindowStyle="None" AllowsTransparency="True" Background="Transparent"
         Topmost="True" ShowInTaskbar="False" ResizeMode="NoResize">
   <Window.Resources>
@@ -28,22 +28,34 @@ $xaml = @'
     <Border.Effect><DropShadowEffect Color="#425071" BlurRadius="24" ShadowDepth="5" Opacity=".19"/></Border.Effect>
     <StackPanel>
       <Border Background="#EAF0FA" CornerRadius="21,21,0,0">
-        <Grid Height="63" Margin="13,0,12,0">
-          <Grid.ColumnDefinitions><ColumnDefinition Width="49"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
-          <Canvas Width="42" Height="43" Grid.Column="0" VerticalAlignment="Center">
-            <Ellipse Width="35" Height="39" Fill="#5C6681" Canvas.Left="4" Canvas.Top="2"/>
-            <Ellipse Width="27" Height="27" Fill="#FFFAF6" Canvas.Left="8" Canvas.Top="13"/>
-            <Path Data="M 5,17 C 5,5 13,1 23,2 C 34,2 39,10 38,18 C 31,16 29,11 24,12 C 17,11 13,16 5,17 Z" Fill="#A6A4BC"/>
-            <Ellipse Width="3.5" Height="4" Fill="#39445D" Canvas.Left="15" Canvas.Top="22"/>
-            <Ellipse Width="3.5" Height="4" Fill="#39445D" Canvas.Left="26" Canvas.Top="22"/>
-            <Ellipse Width="6" Height="3" Fill="#F2BCC2" Opacity=".8" Canvas.Left="9" Canvas.Top="28"/>
-            <Ellipse Width="6" Height="3" Fill="#F2BCC2" Opacity=".8" Canvas.Left="29" Canvas.Top="28"/>
-            <Path Data="M 20,28 L 24,28 L 22,31 Z" Fill="#E8B48F"/>
-            <TextBlock Text="✦" FontSize="11" Foreground="#8F94BD" Canvas.Left="0" Canvas.Top="-3"/>
+        <Grid Height="116" Margin="11,0,12,0">
+          <Grid.ColumnDefinitions><ColumnDefinition Width="99"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+          <Canvas Width="92" Height="110" Grid.Column="0" VerticalAlignment="Center">
+            <!-- Full penguin suit: yellow feet, flippers, round body and beak above the girl's face. -->
+            <Path Data="M 28,94 C 18,93 14,103 24,106 L 42,106 L 40,94 Z" Fill="#F5BF69"/>
+            <Path Data="M 51,95 L 49,106 L 69,106 C 78,103 74,93 63,94 Z" Fill="#F5BF69"/>
+            <Path Data="M 23,53 C 9,50 2,62 2,76 C 11,73 20,70 29,64 Z" Fill="#4B5675"/>
+            <Path Data="M 67,53 C 82,50 90,62 90,75 C 79,72 73,69 63,63 Z" Fill="#4B5675"/>
+            <Ellipse Width="57" Height="70" Fill="#4B5675" Canvas.Left="17" Canvas.Top="34"/>
+            <Ellipse Width="39" Height="51" Fill="#FFF9F3" Canvas.Left="26" Canvas.Top="49"/>
+            <Ellipse Width="66" Height="65" Fill="#4B5675" Canvas.Left="13" Canvas.Top="2"/>
+            <Ellipse Width="48" Height="35" Fill="#FFF9F3" Canvas.Left="22" Canvas.Top="30"/>
+            <Path Data="M 21,42 C 22,31 29,28 43,29 C 57,28 67,34 70,43 C 61,40 59,36 53,38 C 45,37 44,41 38,39 C 29,38 27,43 21,42 Z" Fill="#A2A0B4"/>
+            <Ellipse Width="8" Height="10" Fill="#FFF9F3" Canvas.Left="27" Canvas.Top="10"/>
+            <Ellipse Width="8" Height="10" Fill="#FFF9F3" Canvas.Left="55" Canvas.Top="10"/>
+            <Ellipse Width="3.5" Height="5" Fill="#28364D" Canvas.Left="30" Canvas.Top="13"/>
+            <Ellipse Width="3.5" Height="5" Fill="#28364D" Canvas.Left="58" Canvas.Top="13"/>
+            <Path Data="M 38,21 Q 46,15 54,21 L 46,30 Z" Fill="#F5BF69"/>
+            <Ellipse Width="3.5" Height="5" Fill="#495069" Canvas.Left="34" Canvas.Top="47"/>
+            <Ellipse Width="3.5" Height="5" Fill="#495069" Canvas.Left="54" Canvas.Top="47"/>
+            <Ellipse Width="8" Height="4" Fill="#F5C5C9" Canvas.Left="25" Canvas.Top="53"/>
+            <Ellipse Width="8" Height="4" Fill="#F5C5C9" Canvas.Left="60" Canvas.Top="53"/>
+            <Path Data="M 43,54 Q 46,57 49,54" Stroke="#8D7480" StrokeThickness="1.4" Fill="Transparent"/>
+            <TextBlock Text="✦" FontSize="13" Foreground="#93A2C3" Canvas.Left="1" Canvas.Top="1"/>
           </Canvas>
           <StackPanel Grid.Column="1" VerticalAlignment="Center">
-            <TextBlock x:Name="DragTitle" Text="灯灯的学习角" FontFamily="Microsoft YaHei" FontSize="13" FontWeight="Bold" Foreground="#34405D" Cursor="SizeAll"/>
-            <TextBlock x:Name="HeaderHint" Text="咕咕嘎嘎 · 接着上次练" FontFamily="Microsoft YaHei" FontSize="9" Foreground="#7886A0" Margin="0,2,0,0"/>
+            <TextBlock x:Name="DragTitle" Text="凑企鹅的学习角" FontFamily="Microsoft YaHei" FontSize="13" FontWeight="Bold" Foreground="#34405D" Cursor="SizeAll"/>
+            <TextBlock x:Name="HeaderHint" Text="咕咕嘎嘎 · 接着上次练" FontFamily="Microsoft YaHei" FontSize="9" Foreground="#7886A0" Margin="0,3,0,0"/>
           </StackPanel>
           <Button x:Name="RefreshButton" Grid.Column="2" Content="↻" Width="27" Height="27" Margin="0,0,4,0" FontSize="17" ToolTip="刷新记录"/>
           <Button x:Name="ToggleButton" Grid.Column="3" Content="−" Width="27" Height="27" Margin="0,0,4,0" FontSize="16" ToolTip="收起或展开"/>
@@ -152,7 +164,9 @@ $refreshButton.Add_Click({ Refresh-Widget })
 $toggleButton.Add_Click({
   $script:collapsed = -not $script:collapsed
   $body.Visibility = if ($script:collapsed) { [Windows.Visibility]::Collapsed } else { [Windows.Visibility]::Visible }
-  $window.Width = if ($script:collapsed) { 245 } else { 346 }
+  $window.Width = if ($script:collapsed) { 266 } else { 380 }
+  $window.Left = $window.Left + $(if ($script:collapsed) { 114 } else { -114 })
+  $dragTitle.Text = if ($script:collapsed) { '凑企鹅' } else { '凑企鹅的学习角' }
   $refreshButton.Visibility = if ($script:collapsed) { [Windows.Visibility]::Collapsed } else { [Windows.Visibility]::Visible }
   $toggleButton.Content = if ($script:collapsed) { '⌄' } else { '−' }
   Refresh-Widget
@@ -162,7 +176,7 @@ $timer = [Windows.Threading.DispatcherTimer]::new()
 $timer.Interval = [TimeSpan]::FromMinutes(1)
 $timer.Add_Tick({ Refresh-Widget })
 $workArea = [Windows.SystemParameters]::WorkArea
-$window.Left = $workArea.Right - 366
+$window.Left = $workArea.Right - 400
 $window.Top = $workArea.Top + 85
 $timer.Start()
 $window.Add_Closed({

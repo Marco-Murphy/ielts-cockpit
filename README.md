@@ -182,7 +182,7 @@ mastery     熟练度
 
 ### Windows 桌面小窗
 
-双击 [scripts/start-widget.cmd](scripts/start-widget.cmd) 可打开一个置顶的迷你学习卡片。它显示最近一次听力、阅读练到的位置，以及本周打卡天数；标题可以拖动，右上角可以收起、展开、刷新或关闭。小窗每分钟从本机的 `data/checkins.json` 刷新，不连接云服务。企鹅装饰由代码绘制，不包含动漫截图或官方素材。
+双击 [scripts/start-widget.cmd](scripts/start-widget.cmd) 可打开置顶的「凑企鹅的学习角」。它显示最近一次听力、阅读练到的位置，以及本周打卡天数；标题可以拖动，右上角可以收起、展开、刷新或关闭。小窗每分钟从本机的 `data/checkins.json` 刷新，不连接云服务。凑企鹅风格的连体服小角色由代码绘制，不包含动漫截图或官方素材。
 
 ### 目标模拟器
 
