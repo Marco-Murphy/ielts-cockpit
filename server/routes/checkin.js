@@ -8,14 +8,17 @@
 const express = require('express');
 const router = express.Router();
 
-function todayStr() { return new Date().toISOString().slice(0, 10); }
+function localDateStr(date) {
+  return [date.getFullYear(), String(date.getMonth() + 1).padStart(2, '0'), String(date.getDate()).padStart(2, '0')].join('-');
+}
+function todayStr() { return localDateStr(new Date()); }
 
 function calcStreak(checkins) {
   const dates = new Set(checkins.map(c => c.date));
   let streak = 0;
   const d = new Date();
-  if (!dates.has(d.toISOString().slice(0, 10))) d.setDate(d.getDate() - 1);
-  while (dates.has(d.toISOString().slice(0, 10))) { streak += 1; d.setDate(d.getDate() - 1); }
+  if (!dates.has(localDateStr(d))) d.setDate(d.getDate() - 1);
+  while (dates.has(localDateStr(d))) { streak += 1; d.setDate(d.getDate() - 1); }
   return streak;
 }
 
