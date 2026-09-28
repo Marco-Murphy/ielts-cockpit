@@ -28,9 +28,9 @@ $xaml = @'
     <Border.Effect><DropShadowEffect Color="#425071" BlurRadius="24" ShadowDepth="5" Opacity=".19"/></Border.Effect>
     <StackPanel>
       <Border Background="#EAF0FA" CornerRadius="21,21,0,0">
-        <Grid Height="124" Margin="11,0,12,0">
-          <Grid.ColumnDefinitions><ColumnDefinition Width="99"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
-          <Image x:Name="PenguinArt" Width="91" Height="119" Grid.Column="0" Stretch="Uniform" VerticalAlignment="Center" IsHitTestVisible="False"/>
+        <Grid Height="134" Margin="11,0,12,0">
+          <Grid.ColumnDefinitions><ColumnDefinition Width="110"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+          <Image x:Name="PenguinArt" Width="101" Height="129" Grid.Column="0" Stretch="Uniform" VerticalAlignment="Center" IsHitTestVisible="False"/>
           <StackPanel Grid.Column="1" VerticalAlignment="Center">
             <TextBlock x:Name="DragTitle" Text="凑企鹅的学习角" FontFamily="Microsoft YaHei" FontSize="13" FontWeight="Bold" Foreground="#34405D" Cursor="SizeAll"/>
             <TextBlock x:Name="HeaderHint" Text="咕咕嘎嘎 · 接着上次练" FontFamily="Microsoft YaHei" FontSize="9" Foreground="#7886A0" Margin="0,3,0,0"/>
@@ -74,7 +74,7 @@ $xaml = @'
 
 $window = [Windows.Markup.XamlReader]::Parse($xaml)
 $penguinArt = $window.FindName('PenguinArt')
-$artPath = Join-Path $PSScriptRoot 'assets\tomori-penguin-v2.png'
+$artPath = Join-Path $PSScriptRoot 'assets\tomori-penguin-v3.png'
 $art = [Windows.Media.Imaging.BitmapImage]::new()
 $art.BeginInit()
 $art.UriSource = [Uri]::new($artPath, [UriKind]::Absolute)
