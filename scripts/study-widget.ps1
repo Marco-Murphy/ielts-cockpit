@@ -28,31 +28,9 @@ $xaml = @'
     <Border.Effect><DropShadowEffect Color="#425071" BlurRadius="24" ShadowDepth="5" Opacity=".19"/></Border.Effect>
     <StackPanel>
       <Border Background="#EAF0FA" CornerRadius="21,21,0,0">
-        <Grid Height="116" Margin="11,0,12,0">
+        <Grid Height="124" Margin="11,0,12,0">
           <Grid.ColumnDefinitions><ColumnDefinition Width="99"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
-          <Canvas Width="92" Height="110" Grid.Column="0" VerticalAlignment="Center">
-            <!-- Full penguin suit: yellow feet, flippers, round body and beak above the girl's face. -->
-            <Path Data="M 28,94 C 18,93 14,103 24,106 L 42,106 L 40,94 Z" Fill="#F5BF69"/>
-            <Path Data="M 51,95 L 49,106 L 69,106 C 78,103 74,93 63,94 Z" Fill="#F5BF69"/>
-            <Path Data="M 23,53 C 9,50 2,62 2,76 C 11,73 20,70 29,64 Z" Fill="#4B5675"/>
-            <Path Data="M 67,53 C 82,50 90,62 90,75 C 79,72 73,69 63,63 Z" Fill="#4B5675"/>
-            <Ellipse Width="57" Height="70" Fill="#4B5675" Canvas.Left="17" Canvas.Top="34"/>
-            <Ellipse Width="39" Height="51" Fill="#FFF9F3" Canvas.Left="26" Canvas.Top="49"/>
-            <Ellipse Width="66" Height="65" Fill="#4B5675" Canvas.Left="13" Canvas.Top="2"/>
-            <Ellipse Width="48" Height="35" Fill="#FFF9F3" Canvas.Left="22" Canvas.Top="30"/>
-            <Path Data="M 21,42 C 22,31 29,28 43,29 C 57,28 67,34 70,43 C 61,40 59,36 53,38 C 45,37 44,41 38,39 C 29,38 27,43 21,42 Z" Fill="#A2A0B4"/>
-            <Ellipse Width="8" Height="10" Fill="#FFF9F3" Canvas.Left="27" Canvas.Top="10"/>
-            <Ellipse Width="8" Height="10" Fill="#FFF9F3" Canvas.Left="55" Canvas.Top="10"/>
-            <Ellipse Width="3.5" Height="5" Fill="#28364D" Canvas.Left="30" Canvas.Top="13"/>
-            <Ellipse Width="3.5" Height="5" Fill="#28364D" Canvas.Left="58" Canvas.Top="13"/>
-            <Path Data="M 38,21 Q 46,15 54,21 L 46,30 Z" Fill="#F5BF69"/>
-            <Ellipse Width="3.5" Height="5" Fill="#495069" Canvas.Left="34" Canvas.Top="47"/>
-            <Ellipse Width="3.5" Height="5" Fill="#495069" Canvas.Left="54" Canvas.Top="47"/>
-            <Ellipse Width="8" Height="4" Fill="#F5C5C9" Canvas.Left="25" Canvas.Top="53"/>
-            <Ellipse Width="8" Height="4" Fill="#F5C5C9" Canvas.Left="60" Canvas.Top="53"/>
-            <Path Data="M 43,54 Q 46,57 49,54" Stroke="#8D7480" StrokeThickness="1.4" Fill="Transparent"/>
-            <TextBlock Text="✦" FontSize="13" Foreground="#93A2C3" Canvas.Left="1" Canvas.Top="1"/>
-          </Canvas>
+          <Image x:Name="PenguinArt" Width="91" Height="119" Grid.Column="0" Stretch="Uniform" VerticalAlignment="Center" IsHitTestVisible="False"/>
           <StackPanel Grid.Column="1" VerticalAlignment="Center">
             <TextBlock x:Name="DragTitle" Text="凑企鹅的学习角" FontFamily="Microsoft YaHei" FontSize="13" FontWeight="Bold" Foreground="#34405D" Cursor="SizeAll"/>
             <TextBlock x:Name="HeaderHint" Text="咕咕嘎嘎 · 接着上次练" FontFamily="Microsoft YaHei" FontSize="9" Foreground="#7886A0" Margin="0,3,0,0"/>
@@ -65,16 +43,22 @@ $xaml = @'
       <StackPanel x:Name="WidgetBody" Margin="17,12,17,17">
         <TextBlock x:Name="LastDate" FontFamily="Microsoft YaHei" FontSize="10" Foreground="#7F8AA2" Margin="0,0,0,11"/>
         <TextBlock Text="✦  上次练到" FontFamily="Microsoft YaHei" FontSize="11" FontWeight="Bold" Foreground="#7584AD" Margin="0,0,0,8"/>
-        <Border Background="#F2F4FA" CornerRadius="12" Padding="10,8" Margin="0,0,0,7">
+        <Border x:Name="ListeningCard" Background="#F2F4FA" CornerRadius="12" Padding="10,8" Margin="0,0,0,7">
           <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="47"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
             <TextBlock Text="听力" Grid.Column="0" FontFamily="Microsoft YaHei" FontSize="12" Foreground="#79869C"/>
-            <TextBlock x:Name="ListeningText" Grid.Column="1" FontFamily="Microsoft YaHei" FontSize="12" FontWeight="SemiBold" Foreground="#33415A" TextTrimming="CharacterEllipsis"/>
+            <StackPanel Grid.Column="1">
+              <TextBlock x:Name="ListeningText" FontFamily="Microsoft YaHei" FontSize="12" FontWeight="SemiBold" Foreground="#33415A" TextTrimming="CharacterEllipsis"/>
+              <TextBlock x:Name="ListeningDate" FontFamily="Microsoft YaHei" FontSize="10" Margin="0,3,0,0"/>
+            </StackPanel>
           </Grid>
         </Border>
-        <Border Background="#F2F4FA" CornerRadius="12" Padding="10,8" Margin="0,0,0,14">
+        <Border x:Name="ReadingCard" Background="#F2F4FA" CornerRadius="12" Padding="10,8" Margin="0,0,0,14">
           <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="47"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
             <TextBlock Text="阅读" Grid.Column="0" FontFamily="Microsoft YaHei" FontSize="12" Foreground="#79869C"/>
-            <TextBlock x:Name="ReadingText" Grid.Column="1" FontFamily="Microsoft YaHei" FontSize="12" FontWeight="SemiBold" Foreground="#33415A" TextTrimming="CharacterEllipsis"/>
+            <StackPanel Grid.Column="1">
+              <TextBlock x:Name="ReadingText" FontFamily="Microsoft YaHei" FontSize="12" FontWeight="SemiBold" Foreground="#33415A" TextTrimming="CharacterEllipsis"/>
+              <TextBlock x:Name="ReadingDate" FontFamily="Microsoft YaHei" FontSize="10" Margin="0,3,0,0"/>
+            </StackPanel>
           </Grid>
         </Border>
         <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
@@ -89,6 +73,15 @@ $xaml = @'
 '@
 
 $window = [Windows.Markup.XamlReader]::Parse($xaml)
+$penguinArt = $window.FindName('PenguinArt')
+$artPath = Join-Path $PSScriptRoot 'assets\tomori-penguin-v2.png'
+$art = [Windows.Media.Imaging.BitmapImage]::new()
+$art.BeginInit()
+$art.UriSource = [Uri]::new($artPath, [UriKind]::Absolute)
+$art.CacheOption = [Windows.Media.Imaging.BitmapCacheOption]::OnLoad
+$art.EndInit()
+$art.Freeze()
+$penguinArt.Source = $art
 $dragTitle = $window.FindName('DragTitle')
 $headerHint = $window.FindName('HeaderHint')
 $refreshButton = $window.FindName('RefreshButton')
@@ -96,8 +89,12 @@ $toggleButton = $window.FindName('ToggleButton')
 $closeButton = $window.FindName('CloseButton')
 $body = $window.FindName('WidgetBody')
 $lastDate = $window.FindName('LastDate')
+$listeningCard = $window.FindName('ListeningCard')
 $listeningText = $window.FindName('ListeningText')
+$listeningDate = $window.FindName('ListeningDate')
+$readingCard = $window.FindName('ReadingCard')
 $readingText = $window.FindName('ReadingText')
+$readingDate = $window.FindName('ReadingDate')
 $weekCount = $window.FindName('WeekCount')
 $weekDots = $window.FindName('WeekDots')
 $script:collapsed = $false
@@ -122,25 +119,47 @@ function Get-LastPractice($records, [string]$kind) {
         $unit = [regex]::Match($part, $unitPattern, 'IgnoreCase')
         if ($book.Success -and $test.Success -and $unit.Success) {
           $unitName = if ($kind -eq 'listening') { 'S' } else { 'P' }
-          return "剑桥$($book.Groups[1].Value) · Test $($test.Groups[1].Value) · $unitName$($unit.Groups[1].Value)"
+          return [pscustomobject]@{ Text = "剑桥$($book.Groups[1].Value) · Test $($test.Groups[1].Value) · $unitName$($unit.Groups[1].Value)"; Date = [string]$record.date }
         }
         $clean = $part.Trim()
         if ($clean.Length -gt 27) { $clean = $clean.Substring(0, 27) + '…' }
-        if ($clean) { return $clean }
+        if ($clean) { return [pscustomobject]@{ Text = $clean; Date = [string]$record.date } }
       }
     }
   }
-  return '暂无记录'
+  return [pscustomobject]@{ Text = '暂无记录'; Date = '' }
+}
+
+function Set-PracticeRow($card, $textBlock, $dateBlock, $practice, [datetime]$today) {
+  $textBlock.Text = $practice.Text
+  $dateBlock.Text = '还没有这项练习记录'
+  $background = '#F2F4FA'
+  $dateColor = '#8994A6'
+  if ($practice.Date) {
+    try {
+      $practiceDay = [datetime]::ParseExact($practice.Date, 'yyyy-MM-dd', [Globalization.CultureInfo]::InvariantCulture)
+      $daysAgo = [int]($today - $practiceDay.Date).TotalDays
+      $relative = if ($daysAgo -eq 0) { '今天' } elseif ($daysAgo -eq 1) { '昨天' } elseif ($daysAgo -eq 2) { '前天' } elseif ($daysAgo -gt 2) { "$daysAgo 天前" } else { '未来' }
+      $dateBlock.Text = "$relative  ·  $($practiceDay.ToString('MM/dd'))"
+      if ($daysAgo -eq 0) { $background = '#EAF6F0'; $dateColor = '#37806A' }
+      elseif ($daysAgo -eq 1) { $background = '#EEF1FB'; $dateColor = '#6476AC' }
+      else { $background = '#F3F3F1'; $dateColor = '#7D8490' }
+    } catch {
+      $dateBlock.Text = $practice.Date
+    }
+  }
+  $converter = [Windows.Media.BrushConverter]::new()
+  $card.Background = $converter.ConvertFromString($background)
+  $dateBlock.Foreground = $converter.ConvertFromString($dateColor)
 }
 
 function Refresh-Widget {
   $records = @(Get-Checkins)
   $latest = $records | Where-Object { $_.minutes -gt 0 } | Sort-Object date,updatedAt -Descending | Select-Object -First 1
   $lastDate.Text = if ($latest) { "最近记录  ·  $($latest.date)" } else { '还没有打卡记录' }
-  $listeningText.Text = Get-LastPractice $records 'listening'
-  $readingText.Text = Get-LastPractice $records 'reading'
-
   $today = (Get-Date).Date
+  Set-PracticeRow $listeningCard $listeningText $listeningDate (Get-LastPractice $records 'listening') $today
+  Set-PracticeRow $readingCard $readingText $readingDate (Get-LastPractice $records 'reading') $today
   $monday = $today.AddDays(-(([int]$today.DayOfWeek + 6) % 7))
   $done = @($records | Where-Object { $_.minutes -gt 0 -and $_.date -ge $monday.ToString('yyyy-MM-dd') -and $_.date -le $today.ToString('yyyy-MM-dd') } | Select-Object -ExpandProperty date -Unique)
   $weekCount.Text = "$($done.Count) / 7 天"
@@ -159,7 +178,13 @@ function Refresh-Widget {
   }
 }
 
-$dragTitle.Add_MouseLeftButtonDown({ param($sender,$eventArgs) if ($eventArgs.ClickCount -eq 1) { $window.DragMove() } })
+$window.Add_PreviewMouseLeftButtonDown({
+  param($sender, $eventArgs)
+  if ($eventArgs.ClickCount -ne 1) { return }
+  # Keep the controls clickable; every other visible part of the card can drag it.
+  if ($refreshButton.IsMouseOver -or $toggleButton.IsMouseOver -or $closeButton.IsMouseOver) { return }
+  $window.DragMove()
+})
 $refreshButton.Add_Click({ Refresh-Widget })
 $toggleButton.Add_Click({
   $script:collapsed = -not $script:collapsed
@@ -172,6 +197,11 @@ $toggleButton.Add_Click({
   Refresh-Widget
 })
 $closeButton.Add_Click({ $window.Close() })
+$window.Add_PreviewKeyDown({
+  param($sender, $eventArgs)
+  if ($eventArgs.Key -eq [Windows.Input.Key]::Escape) { $window.Close() }
+})
+$window.Add_MouseRightButtonUp({ $window.Close() })
 $timer = [Windows.Threading.DispatcherTimer]::new()
 $timer.Interval = [TimeSpan]::FromMinutes(1)
 $timer.Add_Tick({ Refresh-Widget })

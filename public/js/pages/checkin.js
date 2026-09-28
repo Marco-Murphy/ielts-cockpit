@@ -7,6 +7,17 @@ const keyOf = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0
 const escapeAttr = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const fullDate = key => { const [y, m, d] = key.split('-').map(Number); return `${y} 年 ${m} 月 ${d} 日 · 周${'日一二三四五六'[new Date(y, m - 1, d).getDay()]}`; };
 const statusOf = (key, byDate, today) => key > today ? 'is-future' : byDate.get(key)?.minutes > 0 ? 'is-practiced' : 'is-missed';
+const draftStorageKey = 'ielts-cockpit:checkin-drafts:v1';
+const drafts = new Map();
+try {
+  const saved = JSON.parse(localStorage.getItem(draftStorageKey) || '{}');
+  if (saved && typeof saved === 'object' && !Array.isArray(saved)) {
+    for (const [date, draft] of Object.entries(saved)) {
+      if (/^\d{4}-\d{2}-\d{2}$/.test(date) && draft && typeof draft === 'object') drafts.set(date, draft);
+    }
+  }
+} catch { /* Keep drafts in memory if browser storage is unavailable. */ }
+const persistDrafts = () => { try { localStorage.setItem(draftStorageKey, JSON.stringify(Object.fromEntries(drafts))); } catch { /* In-memory drafts still work. */ } };
 
 export async function renderCheckin(el) {
   const [records, streak] = await Promise.all([
@@ -19,6 +30,7 @@ export async function renderCheckin(el) {
 
   function render() {
     const selected = byDate.get(state.selected);
+    const draft = drafts.get(state.selected);
     const practiced = records.filter(record => record.minutes > 0 && record.date <= today);
     const hours = Math.round(practiced.reduce((sum, record) => sum + record.minutes, 0) / 60 * 10) / 10;
     const thisMonth = practiced.filter(record => record.date.startsWith(today.slice(0, 7))).length;
@@ -44,8 +56,8 @@ export async function renderCheckin(el) {
         <div class="detail-heading"><div><p class="eyebrow">DAY / 记录</p><h3>${fullDate(state.selected)}</h3><p>${state.selected > today ? '这一天还没有到来。' : selected?.minutes > 0 ? summarizeRecord(selected) : selected ? '当天有记录，学习时长为 0 分钟。' : state.selected === today ? '今天还没有打卡。' : '这一天还没有练习记录。'}</p></div><span class="detail-status ${statusOf(state.selected, byDate, today)}">${state.selected > today ? '未到来' : selected?.minutes > 0 ? '已练习' : '未练习'}</span></div>
         ${state.selected > today ? '<p class="detail-hint">未来的日期暂不能打卡；到了当天，就可以在这里记录。</p>' : `
           <form id="checkin-form" class="checkin-form">
-            <div class="form-grid"><label>学习时长（分钟）<input name="minutes" type="number" min="0" max="600" step="1" required value="${selected ? Number(selected.minutes) || 0 : 60}"></label><label>练习内容（逗号分隔）<input name="items" type="text" value="${escapeAttr((selected?.items || []).join(', '))}" placeholder="精听、阅读、背词"></label></div>
-            <label>一句话笔记<input name="note" type="text" value="${escapeAttr(selected?.note || '')}" placeholder="记录今天的收获"></label>
+            <div class="form-grid"><label>学习时长（分钟）<input name="minutes" type="number" min="0" max="600" step="1" required value="${escapeAttr(draft ? draft.minutes ?? '' : selected ? Number(selected.minutes) || 0 : 60)}"></label><label>练习内容（逗号分隔）<input name="items" type="text" value="${escapeAttr(draft ? draft.items ?? '' : (selected?.items || []).join(', '))}" placeholder="精听、阅读、背词"></label></div>
+            <label>一句话笔记<input name="note" type="text" value="${escapeAttr(draft ? draft.note ?? '' : selected?.note || '')}" placeholder="记录今天的收获"></label>
             <div class="form-actions"><button type="submit" class="btn">${selected ? '保存修改' : state.selected === today ? '完成今日打卡' : '补录这一天'}</button>${selected ? '<button type="button" class="btn btn-secondary" data-delete>删除记录</button>' : ''}<span id="checkin-feedback" role="status" aria-live="polite"></span></div>
           </form>`}
       </section>
@@ -65,6 +77,11 @@ export async function renderCheckin(el) {
     el.querySelectorAll('.calendar-year[data-year]').forEach(button => button.addEventListener('click', () => { state.year = Number(button.dataset.year); state.view = 'month'; render(); }));
 
     const form = el.querySelector('#checkin-form');
+    form?.addEventListener('input', () => {
+      const values = new FormData(form);
+      drafts.set(state.selected, { minutes: String(values.get('minutes') ?? ''), items: String(values.get('items') ?? ''), note: String(values.get('note') ?? '') });
+      persistDrafts();
+    });
     form?.addEventListener('submit', async event => {
       event.preventDefault();
       const submit = form.querySelector('[type="submit"]');
@@ -78,6 +95,8 @@ export async function renderCheckin(el) {
         const result = selected ? await api.patch(`/api/checkins/${encodeURIComponent(selected.id)}`, payload) : await api.post('/api/checkins', { date: state.selected, ...payload });
         byDate.set(state.selected, result);
         if (selected) Object.assign(selected, result); else records.push(result);
+        drafts.delete(state.selected);
+        persistDrafts();
         Object.assign(streak, await api.get('/api/checkins/streak').catch(() => streak));
         render();
         el.querySelector('#checkin-feedback').textContent = '已保存。';
@@ -89,6 +108,8 @@ export async function renderCheckin(el) {
         await api.del(`/api/checkins/${encodeURIComponent(selected.id)}`);
         byDate.delete(state.selected);
         records.splice(records.indexOf(selected), 1);
+        drafts.delete(state.selected);
+        persistDrafts();
         Object.assign(streak, await api.get('/api/checkins/streak').catch(() => streak));
         render();
       } catch (error) { el.querySelector('#checkin-feedback').textContent = `删除失败：${error.message}`; }
