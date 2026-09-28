@@ -9,11 +9,20 @@
  */
 const express = require('express');
 const router = express.Router();
+const chineseMeanings = require('../ecdict-zh.json');
 
 // 类型说明
 // type: 'synonym' 同义替换词对 | 'vocab' 生词 | 'scene_word' 听力场景词
 
 module.exports = (store) => {
+  router.get('/lookup', (req, res) => {
+    const word = String(req.query.word || '').trim().toLowerCase();
+    if (word.length > 80 || !/^[a-z][a-z -]*$/.test(word)) {
+      return res.status(400).json({ error: '请输入英文单词或词组' });
+    }
+    res.json({ word, meaning: chineseMeanings[word] || '', source: 'ECDICT' });
+  });
+
   router.get('/stats', (req, res) => {
     const list = store.all('vocab');
     const stats = {

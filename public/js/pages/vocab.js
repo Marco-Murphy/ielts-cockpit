@@ -33,6 +33,7 @@ export async function renderVocab(el) {
           <div><label>释义</label><input id="f-meaning" placeholder="综合, 合成"></div>
         </div>
       `}
+      <div class="meaning-lookup" id="meaning-lookup" aria-live="polite"></div>
       <label>来源（可选，如 剑19-T1阅读）</label>
       <input id="f-source" placeholder="例：剑19-T1 阅读 Pass2">
       ${tab!=='synonym' ? `
@@ -57,6 +58,48 @@ export async function renderVocab(el) {
     el.querySelector(`[data-tab="${t.id}"]`).addEventListener('click', () => {
       location.hash = `#/vocab?tab=${t.id}`;
     });
+  });
+
+  const wordInput = el.querySelector('#f-word');
+  const meaningInput = el.querySelector('#f-meaning');
+  const suggestion = el.querySelector('#meaning-lookup');
+  let lookupTimer;
+  let lookupVersion = 0;
+  wordInput.addEventListener('input', () => {
+    clearTimeout(lookupTimer);
+    const word = wordInput.value.trim();
+    const version = ++lookupVersion;
+    suggestion.replaceChildren();
+    if (!/^[a-z][a-z -]{1,79}$/i.test(word)) return;
+    suggestion.textContent = '正在查找中文释义…';
+    lookupTimer = setTimeout(async () => {
+      try {
+        const result = await api.get(`/api/vocab/lookup?word=${encodeURIComponent(word)}`);
+        if (version !== lookupVersion || !wordInput.isConnected) return;
+        suggestion.replaceChildren();
+        if (!result.meaning) {
+          suggestion.textContent = '本地词典暂未收录，可以自己填写释义。';
+          return;
+        }
+        const label = document.createElement('span');
+        label.className = 'meaning-lookup-text';
+        label.textContent = `词典建议：${result.meaning}`;
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'btn btn-secondary meaning-lookup-apply';
+        button.textContent = '采用释义';
+        button.addEventListener('click', () => {
+          meaningInput.value = result.meaning;
+          meaningInput.focus();
+          meaningInput.setSelectionRange(meaningInput.value.length, meaningInput.value.length);
+        });
+        suggestion.append(label, button);
+      } catch {
+        if (version === lookupVersion && wordInput.isConnected) {
+          suggestion.textContent = '暂时无法查词，可以自己填写释义。';
+        }
+      }
+    }, 320);
   });
 
   // 新增

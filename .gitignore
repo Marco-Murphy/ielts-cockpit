@@ -7,19 +7,13 @@ node_modules/
 .env.*.local
 
 # ===== 个人数据保护 =====
-# 注意：data/*.json 是被追踪的「空模板」，首次安装即可用。
-# 但一旦你开始录入真实数据，请执行下面任一方式避免误提交：
-#   方式一（推荐）：git update-index --skip-worktree data/*.json
-#   方式二：在下方取消注释，让 git 忽略后续改动
-# data/*.json
-# !data/profile.json
+# 数据文件由程序在本机创建，整个 data/ 目录不提交。
+data/*
+!data/.gitkeep
 
 # 用户上传的音频 / 图片
 uploads/*
 !uploads/.gitkeep
-
-# 运行时备份
-data/backup/
 
 # ===== 日志 =====
 *.log

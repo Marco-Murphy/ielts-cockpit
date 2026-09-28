@@ -26,8 +26,7 @@ Function IsReady()
 End Function
 
 If Not IsReady() Then
-  nodePath = shell.ExpandEnvironmentStrings("%USERPROFILE%") & "\.workbuddy\binaries\node\versions\22.22.2\node.exe"
-  If Not fso.FileExists(nodePath) Then nodePath = "node.exe"
+  nodePath = "node.exe"
   command = """" & nodePath & """ """ & projectRoot & "\server\index.js" & """"
   On Error Resume Next
   shell.Run command, 0, False
