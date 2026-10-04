@@ -41,7 +41,7 @@ $xaml = @'
         </Grid>
       </Border>
       <StackPanel x:Name="WidgetBody" Margin="17,12,17,17">
-        <TextBlock x:Name="LastDate" FontFamily="Microsoft YaHei" FontSize="10" Foreground="#7F8AA2" Margin="0,0,0,11"/>
+        <TextBlock x:Name="LastDate" FontFamily="Microsoft YaHei" FontSize="10" Foreground="#7F8AA2" TextWrapping="Wrap" MaxHeight="40" Margin="0,0,0,11"/>
         <TextBlock Text="✦  上次练到" FontFamily="Microsoft YaHei" FontSize="11" FontWeight="Bold" Foreground="#7584AD" Margin="0,0,0,8"/>
         <Border x:Name="ListeningCard" Background="#F2F4FA" CornerRadius="12" Padding="10,8" Margin="0,0,0,7">
           <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="47"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
@@ -61,9 +61,15 @@ $xaml = @'
             </StackPanel>
           </Grid>
         </Border>
-        <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
-          <TextBlock Text="本周打卡" FontFamily="Microsoft YaHei" FontSize="12" FontWeight="Bold" Foreground="#34405D"/>
-          <TextBlock x:Name="WeekCount" Grid.Column="1" FontFamily="Microsoft YaHei" FontSize="12" FontWeight="Bold" Foreground="#7584AD"/>
+        <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+          <StackPanel>
+            <TextBlock Text="本周打卡" FontFamily="Microsoft YaHei" FontSize="12" FontWeight="Bold" Foreground="#34405D"/>
+            <TextBlock x:Name="WeekCount" FontFamily="Microsoft YaHei" FontSize="12" FontWeight="Bold" Foreground="#7584AD" Margin="0,4,0,0"/>
+          </StackPanel>
+          <StackPanel Grid.Column="1">
+            <TextBlock Text="连续打卡" FontFamily="Microsoft YaHei" FontSize="12" FontWeight="Bold" Foreground="#34405D"/>
+            <TextBlock x:Name="StreakCount" FontFamily="Microsoft YaHei" FontSize="12" FontWeight="Bold" Foreground="#7584AD" Margin="0,4,0,0"/>
+          </StackPanel>
         </Grid>
         <StackPanel x:Name="WeekDots" Orientation="Horizontal" Margin="0,10,0,0"/>
       </StackPanel>
@@ -96,6 +102,7 @@ $readingCard = $window.FindName('ReadingCard')
 $readingText = $window.FindName('ReadingText')
 $readingDate = $window.FindName('ReadingDate')
 $weekCount = $window.FindName('WeekCount')
+$streakCount = $window.FindName('StreakCount')
 $weekDots = $window.FindName('WeekDots')
 $script:collapsed = $false
 
@@ -108,26 +115,45 @@ function Get-Checkins {
 }
 
 function Get-LastPractice($records, [string]$kind) {
-  $pattern = if ($kind -eq 'listening') { 'section\s*\d+|精听|粗听|听力练习' } else { 'reading\s*\d+|精读|阅读练习' }
+  $pattern = if ($kind -eq 'listening') { 'section\s*\d+|精听|粗听|听力练习' } else { 'reading\s*\d+|passage\s*\d+|精读|阅读练习' }
+  $activityDate = ''
+  $progress = $null
   foreach ($record in ($records | Sort-Object date,updatedAt -Descending)) {
-    foreach ($item in @($record.items)) {
-      foreach ($part in ([string]$item -split '[,，;；、]')) {
+    $items = @($record.items)
+    [array]::Reverse($items)
+    foreach ($item in $items) {
+      $parts = @([string]$item -split '[,，;；、]')
+      [array]::Reverse($parts)
+      foreach ($part in $parts) {
         if ($part -notmatch $pattern) { continue }
+        if (-not $activityDate) { $activityDate = [string]$record.date }
         $book = [regex]::Match($part, '(?:剑桥|Cambridge)\s*(\d+)', 'IgnoreCase')
         $test = [regex]::Match($part, 'test\s*[-_ ]*(\d+)', 'IgnoreCase')
-        $unitPattern = if ($kind -eq 'listening') { 'section\s*[-_ ]*(\d+)' } else { 'reading\s*[-_ ]*(\d+)' }
+        $unitPattern = if ($kind -eq 'listening') { 'section\s*[-_ ]*(\d+)' } else { '(?:reading|passage)\s*[-_ ]*(\d+)' }
         $unit = [regex]::Match($part, $unitPattern, 'IgnoreCase')
-        if ($book.Success -and $test.Success -and $unit.Success) {
+        if (-not $progress -and $book.Success -and $test.Success -and $unit.Success) {
           $unitName = if ($kind -eq 'listening') { 'S' } else { 'P' }
-          return [pscustomobject]@{ Text = "剑桥$($book.Groups[1].Value) · Test $($test.Groups[1].Value) · $unitName$($unit.Groups[1].Value)"; Date = [string]$record.date }
+          $progress = [pscustomobject]@{ Text = "剑桥$($book.Groups[1].Value) · Test $($test.Groups[1].Value) · $unitName$($unit.Groups[1].Value)"; Date = [string]$record.date }
         }
-        $clean = $part.Trim()
-        if ($clean.Length -gt 27) { $clean = $clean.Substring(0, 27) + '…' }
-        if ($clean) { return [pscustomobject]@{ Text = $clean; Date = [string]$record.date } }
       }
     }
+    if ($activityDate -and $progress) { break }
   }
-  return [pscustomobject]@{ Text = '暂无记录'; Date = '' }
+  return [pscustomobject]@{
+    Text = if ($progress) { $progress.Text } elseif ($activityDate) { '尚未记录具体套题' } else { '暂无记录' }
+    ActivityDate = $activityDate
+    ProgressDate = if ($progress) { $progress.Date } else { '' }
+  }
+}
+
+function Format-PracticeDate([string]$date, [datetime]$today) {
+  if (-not $date) { return '' }
+  try {
+    $day = [datetime]::ParseExact($date, 'yyyy-MM-dd', [Globalization.CultureInfo]::InvariantCulture)
+    $daysAgo = [int]($today - $day.Date).TotalDays
+    $relative = if ($daysAgo -eq 0) { '今天' } elseif ($daysAgo -eq 1) { '昨天' } elseif ($daysAgo -eq 2) { '前天' } elseif ($daysAgo -gt 2) { "$daysAgo 天前" } else { '未来' }
+    return "$relative（$($day.ToString('MM/dd'))）"
+  } catch { return $date }
 }
 
 function Set-PracticeRow($card, $textBlock, $dateBlock, $practice, [datetime]$today) {
@@ -135,18 +161,18 @@ function Set-PracticeRow($card, $textBlock, $dateBlock, $practice, [datetime]$to
   $dateBlock.Text = '还没有这项练习记录'
   $background = '#F2F4FA'
   $dateColor = '#8994A6'
-  if ($practice.Date) {
+  if ($practice.ActivityDate) {
     try {
-      $practiceDay = [datetime]::ParseExact($practice.Date, 'yyyy-MM-dd', [Globalization.CultureInfo]::InvariantCulture)
+      $practiceDay = [datetime]::ParseExact($practice.ActivityDate, 'yyyy-MM-dd', [Globalization.CultureInfo]::InvariantCulture)
       $daysAgo = [int]($today - $practiceDay.Date).TotalDays
-      $relative = if ($daysAgo -eq 0) { '今天' } elseif ($daysAgo -eq 1) { '昨天' } elseif ($daysAgo -eq 2) { '前天' } elseif ($daysAgo -gt 2) { "$daysAgo 天前" } else { '未来' }
-      $dateBlock.Text = "$relative  ·  $($practiceDay.ToString('MM/dd'))"
       if ($daysAgo -eq 0) { $background = '#EAF6F0'; $dateColor = '#37806A' }
       elseif ($daysAgo -eq 1) { $background = '#EEF1FB'; $dateColor = '#6476AC' }
       else { $background = '#F3F3F1'; $dateColor = '#7D8490' }
-    } catch {
-      $dateBlock.Text = $practice.Date
-    }
+    } catch {}
+  }
+  if ($practice.ActivityDate) { $dateBlock.Text = "最近练习  $(Format-PracticeDate $practice.ActivityDate $today)" }
+  if ($practice.ProgressDate -and $practice.ProgressDate -ne $practice.ActivityDate) {
+    $dateBlock.Text += "`n这套题  $(Format-PracticeDate $practice.ProgressDate $today)"
   }
   $converter = [Windows.Media.BrushConverter]::new()
   $card.Background = $converter.ConvertFromString($background)
@@ -156,14 +182,31 @@ function Set-PracticeRow($card, $textBlock, $dateBlock, $practice, [datetime]$to
 function Refresh-Widget {
   $records = @(Get-Checkins)
   $latest = $records | Where-Object { $_.minutes -gt 0 } | Sort-Object date,updatedAt -Descending | Select-Object -First 1
-  $lastDate.Text = if ($latest) { "最近记录  ·  $($latest.date)" } else { '还没有打卡记录' }
+  $lastDate.Text = if ($latest) {
+    $items = (@($latest.items) | Where-Object { $_ }) -join ' · '
+    if ($items.Length -gt 58) { $items = $items.Substring(0, 58) + '…' }
+    "最近打卡  ·  $($latest.date)`n$items"
+  } else { '还没有打卡记录' }
   $today = (Get-Date).Date
   Set-PracticeRow $listeningCard $listeningText $listeningDate (Get-LastPractice $records 'listening') $today
   Set-PracticeRow $readingCard $readingText $readingDate (Get-LastPractice $records 'reading') $today
   $monday = $today.AddDays(-(([int]$today.DayOfWeek + 6) % 7))
   $done = @($records | Where-Object { $_.minutes -gt 0 -and $_.date -ge $monday.ToString('yyyy-MM-dd') -and $_.date -le $today.ToString('yyyy-MM-dd') } | Select-Object -ExpandProperty date -Unique)
   $weekCount.Text = "$($done.Count) / 7 天"
-  $headerHint.Text = if ($script:collapsed) { "本周 $($done.Count)/7 天" } else { '咕咕嘎嘎 · 接着上次练' }
+  $doneDates = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::Ordinal)
+  foreach ($record in $records) {
+    if ([string]$record.date -match '^\d{4}-\d{2}-\d{2}$' -and $record.date -le $today.ToString('yyyy-MM-dd')) {
+      [void]$doneDates.Add([string]$record.date)
+    }
+  }
+  $streakDay = if ($doneDates.Contains($today.ToString('yyyy-MM-dd'))) { $today } else { $today.AddDays(-1) }
+  $streak = 0
+  while ($doneDates.Contains($streakDay.ToString('yyyy-MM-dd'))) {
+    $streak++
+    $streakDay = $streakDay.AddDays(-1)
+  }
+  $streakCount.Text = "$streak 天"
+  $headerHint.Text = if ($script:collapsed) { "连${streak}天·周$($done.Count)/7" } else { '咕咕嘎嘎 · 接着上次练' }
   $weekDots.Children.Clear()
   for ($i = 0; $i -lt 7; $i++) {
     $date = $monday.AddDays($i)

@@ -11,10 +11,62 @@ const express = require('express');
 const router = express.Router();
 const chineseMeanings = require('../ecdict-zh.json');
 
+function cleanOrigin(value) {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  const text = (key, limit = 500) => String(value[key] || '').trim().slice(0, limit);
+  const number = (key, max) => {
+    const raw = value[key];
+    if (raw === '' || raw === null || raw === undefined) return null;
+    const parsed = Number(raw);
+    return Number.isInteger(parsed) && parsed >= 1 && parsed <= max ? parsed : null;
+  };
+  const origin = {
+    book: number('book', 30),
+    test: number('test', 4),
+    skill: ['reading', 'listening'].includes(value.skill) ? value.skill : '',
+    part: number('part', 4),
+    title: text('title', 160),
+    questionRef: text('questionRef', 80),
+    practiceDate: /^\d{4}-\d{2}-\d{2}$/.test(text('practiceDate', 10)) ? text('practiceDate', 10) : '',
+    questionText: text('questionText', 1200),
+    evidence: text('evidence', 1200),
+    pdfPage: number('pdfPage', 2000),
+    pdfUrl: /^https:\/\//i.test(text('pdfUrl', 500)) ? text('pdfUrl', 500) : '',
+    verified: value.verified === true
+  };
+  return Object.entries(origin).some(([key, value]) => key !== 'verified' && value) ? origin : null;
+}
+
 // 类型说明
 // type: 'synonym' 同义替换词对 | 'vocab' 生词 | 'scene_word' 听力场景词
 
 module.exports = (store) => {
+  router.get('/practiced-sources', (_req, res) => {
+    const found = new Map();
+    for (const checkin of store.all('checkins')) {
+      for (const raw of checkin.items || []) {
+        const item = String(raw).replace(/\s+/g, '').toLowerCase();
+        let book = null;
+        let test = null;
+        for (const segment of item.split(/[，,；;]/)) {
+          const bookMatch = segment.match(/剑(?:桥)?(\d+)/);
+          const testMatch = segment.match(/test(\d+)/);
+          if (bookMatch) book = Number(bookMatch[1]);
+          if (testMatch) test = Number(testMatch[1]);
+          if (!book || !test) continue;
+          for (const match of segment.matchAll(/(?:reading|passage|p)[*]?(\d+)|(?:section|s)(\d+)/g)) {
+            const skill = match[1] ? 'reading' : 'listening';
+            const part = Number(match[1] || match[2]);
+            if (part < 1 || part > 4) continue;
+            const item = { book, test, skill, part, date: checkin.date };
+            found.set(`${book}-${test}-${skill}-${part}-${checkin.date}`, item);
+          }
+        }
+      }
+    }
+    res.json([...found.values()].sort((a, b) => b.date.localeCompare(a.date)));
+  });
+
   router.get('/lookup', (req, res) => {
     const word = String(req.query.word || '').trim().toLowerCase();
     if (word.length > 80 || !/^[a-z][a-z -]*$/.test(word)) {
@@ -28,6 +80,8 @@ module.exports = (store) => {
     const stats = {
       total: list.length,
       unlearned: list.filter(v => !v.learned).length,
+      withOrigin: list.filter(v => v.origin).length,
+      verifiedOrigin: list.filter(v => v.origin?.verified).length,
       byType: { synonym: 0, vocab: 0, scene_word: 0 }
     };
     for (const v of list) stats.byType[v.type] = (stats.byType[v.type] || 0) + 1;
@@ -48,6 +102,10 @@ module.exports = (store) => {
         || (v.meaning || '').toLowerCase().includes(kw)
         || (v.alternate || '').toLowerCase().includes(kw)
         || (v.note || '').toLowerCase().includes(kw)
+        || (v.source || '').toLowerCase().includes(kw)
+        || (v.origin?.title || '').toLowerCase().includes(kw)
+        || (v.origin?.questionRef || '').toLowerCase().includes(kw)
+        || (v.origin?.questionText || '').toLowerCase().includes(kw)
       );
     }
     list.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
@@ -77,11 +135,21 @@ module.exports = (store) => {
       section: body.section || '',       // 'listening'|'reading'
       source: body.source || '',         // 来源（如 剑19-T1阅读）
       example: body.example || '',
+      origin: cleanOrigin(body.origin),
       note: body.note || '',
       learned: !!body.learned,           // 是否已掌握
-      mastery: body.mastery || 0         // 熟练度 0-5
+      mastery: body.mastery || 0,        // 熟练度 0-5
+      reviewCount: 0                    // 用户主动点击“复习一次”的累计次数
     });
     res.json(record);
+  });
+
+  router.post('/:id/review', (req, res) => {
+    const item = store.findById('vocab', req.params.id);
+    if (!item) return res.status(404).json({ error: '未找到' });
+    const current = Number.isSafeInteger(item.reviewCount) && item.reviewCount >= 0 ? item.reviewCount : 0;
+    const updated = store.update('vocab', item.id, { reviewCount: current + 1 });
+    res.json({ id: updated.id, reviewCount: updated.reviewCount });
   });
 
   router.patch('/:id', (req, res) => {
@@ -92,6 +160,7 @@ module.exports = (store) => {
     const allowed = ['word', 'alternate', 'meaning', 'basic', 'basicNote', 'section', 'source', 'example', 'note', 'learned', 'mastery'];
     const clean = {};
     for (const k of allowed) if (patch[k] !== undefined) clean[k] = patch[k];
+    if (patch.origin !== undefined) clean.origin = cleanOrigin(patch.origin);
     const updated = store.update('vocab', item.id, clean);
     res.json(updated);
   });

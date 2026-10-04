@@ -396,3 +396,48 @@ tr:last-child td { border-bottom: 0; }
   .day-mark { font-size: 7px; }
   .rhythm-stats span { font-size: 9px; }
 }
+
+/* 词汇出处：原文、原题和可核实的卷面位置。 */
+.meaning-lookup { margin: 8px 0 4px; color: var(--text-muted); font-size: 12px; line-height: 1.6; }
+.meaning-lookup:empty { display: none; }
+.meaning-lookup:not(:empty) { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); }
+.meaning-lookup-text { flex: 1 1 220px; color: var(--text); }
+.meaning-lookup-apply { flex: none; padding: 5px 10px; font-size: 12px; }
+.vocab-entry { padding: 16px 0; border-bottom: 1px solid var(--border); }
+.vocab-entry:last-child { border-bottom: 0; }
+.vocab-entry-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
+.vocab-entry-head > div:first-child { min-width: 0; }
+.vocab-entry-head > .row { flex: none; }
+.vocab-entry-number { display: inline-block; min-width: 2.4em; margin-right: 5px; color: var(--text-muted); font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.vocab-review-actions { align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+.vocab-review-actions [data-review] { padding: 7px 12px; font-size: 12px; white-space: nowrap; }
+.vocab-review-count { color: var(--text-muted); font-size: 12px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.vocab-review-feedback { width: 100%; color: var(--color-danger, #a8463f); font-size: 11px; text-align: right; }
+.vocab-review-feedback:empty { display: none; }
+.vocab-entry-notes { margin-top: 5px; font-size: 12px; line-height: 1.8; }
+.vocab-entry-notes .badge { margin-left: 4px; }
+.vocab-basic { margin-top: 3px; color: var(--color-success, #48865d); font-size: 12px; }
+.vocab-origin-editor { margin-top: 11px; }
+.vocab-origin-editor summary { width: fit-content; color: var(--primary); font-size: 12px; font-weight: 700; cursor: pointer; }
+.vocab-origin-fields { display: grid; gap: 13px; margin: 15px 0; padding: 17px; border: 1px solid var(--border); border-radius: 12px; background: var(--bg); }
+.vocab-origin-fields .grid-2 { gap: 10px 16px; }
+.vocab-origin-fields label { margin: 0; color: var(--text-muted); font-size: 12px; }
+.vocab-origin-fields label > input, .vocab-origin-fields label > textarea, .vocab-origin-fields label > select { margin-top: 6px; }
+.vocab-origin-fields .vocab-origin-check { display: flex; align-items: center; gap: 8px; color: var(--text); }
+.vocab-origin-check input { width: auto; margin: 0; }
+.vocab-origin-summary { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 10px; margin-top: 10px; padding: 11px 13px; border-radius: 10px; background: var(--bg); font-size: 12px; line-height: 1.6; }
+.vocab-origin-summary strong { font-weight: 650; }
+.vocab-origin-summary small { color: var(--text-muted); }
+.vocab-origin-summary a { color: var(--primary); text-decoration: underline; text-underline-offset: 2px; }
+.vocab-origin-summary p { flex-basis: 100%; margin: 0; color: var(--text-muted); white-space: pre-wrap; overflow-wrap: anywhere; }
+.vocab-origin-summary p span { margin-right: 5px; color: var(--text); font-weight: 700; }
+.vocab-origin-badge { padding: 2px 7px; border-radius: 999px; background: var(--bg-hover); color: var(--text-muted); font-size: 10px; font-weight: 700; }
+.vocab-origin-badge.is-verified { background: color-mix(in srgb, var(--band-good) 14%, transparent); color: var(--band-good); }
+.vocab-origin-feedback { margin-left: 9px; color: var(--text-muted); font-size: 12px; }
+.vocab-filters { display: flex; flex-wrap: wrap; gap: 7px; margin: -3px 0 10px; }
+.vocab-filters .btn { padding: 6px 11px; border-radius: 999px; font-size: 11px; }
+.vocab-filters .is-active { border-color: var(--primary); color: var(--primary); background: var(--primary-dim); }
+@media (max-width: 640px) {
+  .vocab-entry-head { flex-direction: column; gap: 8px; }
+  .vocab-origin-fields { padding: 13px; }
+}
